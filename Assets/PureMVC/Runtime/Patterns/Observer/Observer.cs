@@ -6,9 +6,10 @@
 //
 
 using System;
-using PureMVC.Interfaces;
 
-namespace PureMVC.Patterns.Observer
+using KiwiFramework.PureMVC.Interfaces;
+
+namespace KiwiFramework.PureMVC.Patterns
 {
     /// <summary>
     /// A base <c>IObserver</c> implementation.
@@ -30,7 +31,7 @@ namespace PureMVC.Patterns.Observer
     ///     </para>
     /// </remarks>
     /// <seealso cref="PureMVC.Core.View"/>
-    /// <seealso cref="PureMVC.Patterns.Observer.Notification"/>
+    /// <seealso cref="Notification"/>
     public class Observer: IObserver
     {
         /// <summary>

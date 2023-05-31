@@ -6,9 +6,10 @@
 //
 
 using System;
-using PureMVC.Interfaces;
 
-namespace PureMVC.Patterns.Observer
+using KiwiFramework.PureMVC.Interfaces;
+
+namespace KiwiFramework.PureMVC.Patterns
 {
     /// <summary>
     /// A Base <c>INotifier</c> implementation.
@@ -43,11 +44,11 @@ namespace PureMVC.Patterns.Observer
     ///         </list>
     ///     </para>
     /// </remarks>
-    /// <seealso cref="PureMVC.Patterns.Proxy.Proxy"/>
-    /// <seealso cref="PureMVC.Patterns.Facade.Facade"/>
-    /// <seealso cref="PureMVC.Patterns.Mediator.Mediator"/>
-    /// <seealso cref="PureMVC.Patterns.Command.MacroCommand"/>
-    /// <seealso cref="PureMVC.Patterns.Command.SimpleCommand"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Proxy"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Facade"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Mediator"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.MacroCommand"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.SimpleCommand"/>
     public class Notifier: INotifier
     {
         /// <summary>
@@ -97,7 +98,7 @@ namespace PureMVC.Patterns.Observer
         {
             get {
                 if (MultitonKey == null) throw new Exception(MULTITON_MSG);
-                return Patterns.Facade.Facade.GetInstance(MultitonKey, key => new Facade.Facade(key));
+                return KiwiFramework.PureMVC.Patterns.Facade.GetInstance(MultitonKey, key => new KiwiFramework.PureMVC.Patterns.Facade(key));
             }
         }
 

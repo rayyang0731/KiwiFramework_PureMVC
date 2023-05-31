@@ -7,9 +7,10 @@
 
 using System;
 using System.Collections.Concurrent;
-using PureMVC.Interfaces;
 
-namespace PureMVC.Core
+using KiwiFramework.PureMVC.Interfaces;
+
+namespace KiwiFramework.PureMVC.Core
 {
     /// <summary>
     /// A Multiton <c>IModel</c> implementation
@@ -28,7 +29,7 @@ namespace PureMVC.Core
     ///         instances once the <c>Facade</c> has initialized the Core actors
     ///     </para>
     /// </remarks>
-    /// <seealso cref="PureMVC.Patterns.Proxy.Proxy"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Proxy"/>
     /// <seealso cref="PureMVC.Interfaces.IProxy" />
     public class Model: IModel
     {
@@ -94,7 +95,7 @@ namespace PureMVC.Core
         /// </summary>
         /// <param name="proxyName"></param>
         /// <returns>the <c>IProxy</c> instance previously registered with the given <c>proxyName</c>.</returns>
-        public virtual IProxy RetrieveProxy(string proxyName)
+        public virtual IProxy GetProxy(string proxyName)
         {
             return proxyMap.TryGetValue(proxyName, out var proxy) ? proxy : null;
         }

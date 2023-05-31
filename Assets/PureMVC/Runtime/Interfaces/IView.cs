@@ -5,7 +5,7 @@
 //  Your reuse is governed by the Creative Commons Attribution 3.0 License
 //
 
-namespace PureMVC.Interfaces
+namespace KiwiFramework.PureMVC.Interfaces
 {
     /// <summary>
     /// The interface definition for a PureMVC View.
@@ -79,7 +79,7 @@ namespace PureMVC.Interfaces
         /// </summary>
         /// <param name="mediatorName">the name of the <c>IMediator</c> instance to retrieve.</param>
         /// <returns>the <c>IMediator</c> instance previously registered with the given <c>mediatorName</c>.</returns>
-        IMediator RetrieveMediator(string mediatorName);
+        IMediator GetMediator(string mediatorName);
 
         /// <summary>
         /// Remove an <c>IMediator</c> from the <c>View</c>.

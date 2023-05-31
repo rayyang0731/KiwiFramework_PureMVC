@@ -1,27 +1,14 @@
-﻿//
-//  PureMVC C# Multicore
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
+﻿using System;
 
-using System;
-
-namespace PureMVC.Interfaces
+namespace KiwiFramework.PureMVC.Interfaces
 {
     /// <summary>
-    /// The interface definition for a PureMVC Facade.
+    /// PureMVC Facade 的接口定义.
     /// </summary>
     /// <remarks>
     ///     <para>
-    ///         The Facade Pattern suggests providing a single
-    ///         class to act as a central point of communication 
-    ///         for a subsystem.
-    ///     </para>
-    ///     <para>
-    ///         In PureMVC, the Facade acts as an interface between
-    ///         the core MVC actors (Model, View, Controller) and
-    ///         the rest of your application.
+    ///         外观模式建议, 提供一个类作为子系统通信的中心点.
+    ///         在 PureMVC 中, Facade 充当核心 MVC , Model, View, Controller 与应用程序其余部分之间的接口.
     ///     </para>
     /// </remarks>
     /// <seealso cref="IModel"/>
@@ -32,95 +19,90 @@ namespace PureMVC.Interfaces
     public interface IFacade: INotifier
     {
         /// <summary>
-        /// Register an <c>IProxy</c> with the <c>Model</c> by name.
+        /// 向 <c>Model</c> 注册 <c>IProxy</c>。
         /// </summary>
-        /// <param name="proxy">the <c>IProxy</c> to be registered with the <c>Model</c>.</param>
+        /// <param name="proxy">要向 <c>Model</c> 注册的 <c>IProxy</c> 实例.</param>
         void RegisterProxy(IProxy proxy);
 
         /// <summary>
-        /// Retrieve a <c>IProxy</c> from the <c>Model</c> by name.
+        /// 按名称从 <c>Model</c> 中获取 <c>IProxy</c> 对象.
         /// </summary>
-        /// <param name="proxyName">the name of the <c>IProxy</c> instance to be retrieved.</param>
-        /// <returns>the <c>IProxy</c> previously regisetered by <c>proxyName</c> with the <c>Model</c>.</returns>
-        IProxy RetrieveProxy(string proxyName);
+        /// <param name="proxyName">要获取的 <c>IProxy</c> 名称.</param>
+        /// <returns>通过 <paramref name="proxyName"/> 获取到的 <c>IProxy</c> 实例.</returns>
+        IProxy GetProxy(string proxyName);
 
         /// <summary>
-        /// Remove an <c>IProxy</c> instance from the <c>Model</c> by name.
+        /// 根据 <c>proxyName</c> 从 <c>Model</c> 移除 <c>IProxy</c>
         /// </summary>
-        /// <param name="proxyName">the <c>IProxy</c> to remove from the <c>Model</c>.</param>
-        /// <returns>the <c>IProxy</c> that was removed from the <c>Model</c></returns>
+        /// <param name="proxyName">要移除的 <c>IProxy</c> 名称.</param>
+        /// <returns>从 <c>Model</c> 中移除的 <c>IProxy</c>.</returns>
         IProxy RemoveProxy(string proxyName);
 
         /// <summary>
-        /// Check if a Proxy is registered
+        /// 检测 <c>IProxy</c> 是否被注册
         /// </summary>
-        /// <param name="proxyName"></param>
-        /// <returns>whether a Proxy is currently registered with the given <c>proxyName</c>.</returns>
+        /// <param name="proxyName">要检测的 <c>IProxy</c> 名称.</param>
+        /// <returns>当前是否注册了 <param name="proxyName"/> 的 <c>IProxy</c>.</returns>
         bool HasProxy(string proxyName);
 
         /// <summary>
-        /// Register an <c>ICommand</c> with the <c>Controller</c>.
+        /// 通过 Notification 的名称向 <c>Controller</c> 注册 <c>ICommand</c>。
         /// </summary>
-        /// <param name="notificationName">the name of the <c>INotification</c> to associate the <c>ICommand</c> with.</param>
-        /// <param name="commandFunc">a reference to the <c>FuncDelegate</c> of the <c>ICommand</c></param>
+        /// <param name="notificationName">与 <c>ICommand</c> 关联的 <c>INotification</c> 的名称</param>
+        /// <param name="commandFunc">对 <c>ICommand</c> 类的引用</param>
         void RegisterCommand(string notificationName, Func<ICommand> commandFunc);
 
         /// <summary>
-        /// Remove a previously registered <c>ICommand</c> to <c>INotification</c> mapping from the Controller.
+        /// 通过 Notification 的名称从 <c>Controller</c> 中移除 <c>ICommand</c>.
         /// </summary>
-        /// <param name="notificationName">the name of the <c>INotification</c> to remove the <c>ICommand</c> mapping for</param>
+        /// <param name="notificationName">与 <c>ICommand</c> 关联的 <c>INotification</c> 的名称</param>
         void RemoveCommand(string notificationName);
 
         /// <summary>
-        /// Check if a Command is registered for a given Notification 
+        /// 检查是否注册了对应 Notification 名称的 <c>ICommand</c>
         /// </summary>
-        /// <param name="notificationName"></param>
-        /// <returns>whether a Command is currently registered for the given <c>notificationName</c>.</returns>
+        /// <param name="notificationName">与 <c>ICommand</c> 关联的 <c>INotification</c> 的名称</param>
+        /// <returns>当前是否注册了 <param name="notificationName"/> 的 <c>ICommand</c>.</returns>
         bool HasCommand(string notificationName);
 
         /// <summary>
-        /// Register an <c>IMediator</c> instance with the <c>View</c>.
+        /// 向 <c>View</c> 注册 <c>IMediator</c>
         /// </summary>
-        /// <param name="mediator">a reference to the <c>IMediator</c> instance</param>
+        /// <param name="mediator">要向 <c>View</c> 注册的 <c>IMediator</c> 实例.</param>
         void RegisterMediator(IMediator mediator);
 
         /// <summary>
-        /// Retrieve an <c>IMediator</c> instance from the <c>View</c>.
+        /// 从 <c>View</c> 中获取 <c>IMediator</c>
         /// </summary>
-        /// <param name="mediatorName">the name of the <c>IMediator</c> instance to retrievve</param>
-        /// <returns>the <c>IMediator</c> previously registered with the given <c>mediatorName</c>.</returns>
-        IMediator RetrieveMediator(string mediatorName);
+        /// <param name="mediatorName">要获取的 <c>IMediator</c> 名称.</param>
+        /// <returns>通过 <paramref name="mediatorName"/> 获取到的 <c>IMediator</c> 实例.</returns>
+        IMediator GetMediator(string mediatorName);
 
         /// <summary>
-        /// Remove a <c>IMediator</c> instance from the <c>View</c>.
+        /// 根据 <c>mediatorName</c> 从 <c>View</c> 移除 <c>IMediator</c>
         /// </summary>
-        /// <param name="mediatorName">name of the <c>IMediator</c> instance to be removed</param>
-        /// <returns>the <c>IMediator</c> instance previously registered with the given <c>mediatorName</c>.</returns>
+        /// <param name="mediatorName">要移除的 <c>IMediator</c> 名称.</param>
+        /// <returns>从 <c>View</c> 中移除的 <c>IMediator</c>.</returns>
         IMediator RemoveMediator(string mediatorName);
 
         /// <summary>
-        /// Check if a Mediator is registered or not
+        /// 检测 <c>IMediator</c> 是否被注册
         /// </summary>
-        /// <param name="mediatorName"></param>
-        /// <returns>whether a Mediator is registered with the given <c>mediatorName</c>.</returns>
+        /// <param name="mediatorName">要检测的 <c>IMediator</c> 名称.</param>
+        /// <returns>当前是否注册了 <param name="mediatorName"/> 的 <c>IMediator</c>.</returns>
         bool HasMediator(string mediatorName);
 
         /// <summary>
-        /// Notify <c>Observer</c>s.
+        /// 通知 <c>Observer</c>.
         /// </summary>
         /// <remarks>
         ///     <para>
-        ///         This method is left public mostly for backward 
-        ///         compatibility, and to allow you to send custom 
-        ///         notification classes using the facade.
-        ///     </para>
-        ///     <para>
-        ///         Usually you should just call sendNotification
-        ///         and pass the parameters, never having to 
-        ///         construct the notification yourself.
+        ///         这个方法是公共方法, 主要是为了向后兼容, 并允许发送自定义通知类.
+        ///         通常应该只调用 <c>SendNotification</c> 并传递参数,
+        ///			而不必自己构建 <c>INotification</c>。
         ///     </para>
         /// </remarks>
-        /// <param name="notification">the <c>INotification</c> to have the <c>View</c> notify <c>Observers</c> of.</param>
+        /// <param name="notification">要通知出去的 <c>IINotification</c> 实例.</param>
         void NotifyObservers(INotification notification);
     }
 }

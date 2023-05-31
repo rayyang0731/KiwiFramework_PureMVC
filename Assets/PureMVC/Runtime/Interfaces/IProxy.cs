@@ -5,7 +5,7 @@
 //  Your reuse is governed by the Creative Commons Attribution 3.0 License
 //
 
-namespace PureMVC.Interfaces
+namespace KiwiFramework.PureMVC.Interfaces
 {
     /// <summary>
     /// The interface definition for a PureMVC Proxy.

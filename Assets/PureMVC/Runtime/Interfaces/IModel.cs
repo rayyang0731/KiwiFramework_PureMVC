@@ -5,7 +5,7 @@
 //  Your reuse is governed by the Creative Commons Attribution 3.0 License
 //
 
-namespace PureMVC.Interfaces
+namespace KiwiFramework.PureMVC.Interfaces
 {
     /// <summary>
     /// The interface definition for a PureMVC Model.
@@ -36,7 +36,7 @@ namespace PureMVC.Interfaces
         /// </summary>
         /// <param name="proxyName"></param>
         /// <returns>the <c>IProxy</c> instance previously registered with the given <c>proxyName</c>.</returns>
-        IProxy RetrieveProxy(string proxyName);
+        IProxy GetProxy(string proxyName);
 
         /// <summary>
         /// Remove an <c>IProxy</c> instance from the Model.

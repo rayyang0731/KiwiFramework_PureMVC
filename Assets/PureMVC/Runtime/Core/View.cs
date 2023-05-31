@@ -8,10 +8,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-using PureMVC.Interfaces;
-using PureMVC.Patterns.Observer;
 
-namespace PureMVC.Core
+using KiwiFramework.PureMVC.Interfaces;
+using KiwiFramework.PureMVC.Patterns;
+
+namespace KiwiFramework.PureMVC.Core
 {
     /// <summary>
     /// A Multiton <c>IView</c> implementation.
@@ -27,9 +28,9 @@ namespace PureMVC.Core
     ///         <item>Notifying the <c>IObservers</c> of a given <c>INotification</c> when it broadcast</item>
     ///     </list>
     /// </remarks>
-    /// <seealso cref="PureMVC.Patterns.Mediator.Mediator"/>
-    /// <seealso cref="PureMVC.Patterns.Observer.Observer"/>
-    /// <seealso cref="PureMVC.Patterns.Observer.Notification"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Mediator"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Observer"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Notification"/>
     public class View: IView
     {
         /// <summary>
@@ -192,7 +193,7 @@ namespace PureMVC.Core
         /// </summary>
         /// <param name="mediatorName">the name of the <c>IMediator</c> instance to retrieve.</param>
         /// <returns>the <c>IMediator</c> instance previously registered with the given <c>mediatorName</c>.</returns>
-        public virtual IMediator RetrieveMediator(string mediatorName)
+        public virtual IMediator GetMediator(string mediatorName)
         {
             return mediatorMap.TryGetValue(mediatorName, out var mediator) ? mediator : null;
         }

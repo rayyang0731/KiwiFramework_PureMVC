@@ -7,10 +7,11 @@
 
 using System;
 using System.Collections.Generic;
-using PureMVC.Interfaces;
-using PureMVC.Patterns.Observer;
 
-namespace PureMVC.Patterns.Command
+using KiwiFramework.PureMVC.Interfaces;
+using KiwiFramework.PureMVC.Patterns;
+
+namespace KiwiFramework.PureMVC.Patterns
 {
     /// <summary>
     /// A base <c>ICommand</c> implementation that executes other <c>ICommand</c>s.
@@ -36,8 +37,8 @@ namespace PureMVC.Patterns.Command
     ///     </para>
     /// </remarks>
     /// <seealso cref="PureMVC.Core.Controller"/>
-    /// <seealso cref="PureMVC.Patterns.Observer.Notification"/>
-    /// <seealso cref="PureMVC.Patterns.Command.SimpleCommand"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Notification"/>
+    /// <seealso cref="SimpleCommand"/>
     public class MacroCommand : Notifier, ICommand
     {
         /// <summary>

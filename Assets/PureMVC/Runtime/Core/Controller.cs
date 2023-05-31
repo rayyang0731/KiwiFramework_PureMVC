@@ -7,10 +7,11 @@
 
 using System;
 using System.Collections.Concurrent;
-using PureMVC.Interfaces;
-using PureMVC.Patterns.Observer;
 
-namespace PureMVC.Core
+using KiwiFramework.PureMVC.Interfaces;
+using KiwiFramework.PureMVC.Patterns;
+
+namespace KiwiFramework.PureMVC.Core
 {
     /// <summary>
     /// A Multiton <c>IController</c> implementation.
@@ -41,10 +42,10 @@ namespace PureMVC.Core
     /// 	</para>
     /// </remarks>
     /// <seealso cref="PureMVC.Core.View"/>
-    /// <seealso cref="PureMVC.Patterns.Observer.Observer"/>
-    /// <seealso cref="PureMVC.Patterns.Observer.Notification"/>
-    /// <seealso cref="PureMVC.Patterns.Command.SimpleCommand"/>
-    /// <seealso cref="PureMVC.Patterns.Command.MacroCommand"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Observer"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Notification"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.SimpleCommand"/>
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.MacroCommand"/>
     public class Controller: IController
     {
         /// <summary>

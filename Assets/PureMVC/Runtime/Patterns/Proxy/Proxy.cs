@@ -5,10 +5,10 @@
 //  Your reuse is governed by the Creative Commons Attribution 3.0 License
 //
 
-using PureMVC.Interfaces;
-using PureMVC.Patterns.Observer;
+using KiwiFramework.PureMVC.Interfaces;
+using KiwiFramework.PureMVC.Patterns;
 
-namespace PureMVC.Patterns.Proxy
+namespace KiwiFramework.PureMVC.Patterns
 {
     /// <summary>
     /// A base <c>IProxy</c> implementation. 
