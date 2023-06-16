@@ -1,11 +1,4 @@
-﻿//
-//  PureMVC C# Multicore
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
@@ -14,239 +7,230 @@ using KiwiFramework.PureMVC.Patterns;
 
 namespace KiwiFramework.PureMVC.Core
 {
-    /// <summary>
-    /// A Multiton <c>IView</c> implementation.
-    /// </summary>
-    /// <remarks>
-    ///     <para>In PureMVC, the <c>View</c> class assumes these responsibilities:</para>
-    ///     <list type="bullet">
-    ///         <item>Maintain a cache of <c>IMediator</c> instances</item>
-    ///         <item>Provide methods for registering, retrieving, and removing <c>IMediators</c></item>
-    ///         <item>Managing the observer lists for each <c>INotification</c> in the application</item>
-    ///         <item>Providing a method for attaching <c>IObservers</c> to an <c>INotification</c>'s observer list</item>
-    ///         <item>Providing a method for broadcasting an <c>INotification</c></item>
-    ///         <item>Notifying the <c>IObservers</c> of a given <c>INotification</c> when it broadcast</item>
-    ///     </list>
-    /// </remarks>
-    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Mediator"/>
-    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Observer"/>
-    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Notification"/>
-    public class View: IView
-    {
-        /// <summary>
-        /// Constructs and initializes a new view
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         This <c>IView</c> implementation is a Multiton, 
-        ///         so you should not call the constructor 
-        ///         directly, but instead call the static Multiton 
-        ///         Factory method <c>View.getInstance(multitonKey, key => new View(key))</c>
-        ///     </para>
-        /// </remarks>
-        /// <param name="key">Key of view</param>
-        public View(string key)
-        {
-            multitonKey = key;
-            InstanceMap.TryAdd(key, new Lazy<IView>(() => this));
-            mediatorMap = new ConcurrentDictionary<string, IMediator>();
-            observerMap = new ConcurrentDictionary<string, IList<IObserver>>();
-            InitializeView();
-        }
+	/// <summary>
+	/// <see cref="IView"/> 的实现(多例模式)
+	/// </summary>
+	public class View : IView
+	{
+		/// <summary> 
+		/// 构造并初始化一个新的 View
+		/// </summary> 
+		/// <remarks> 
+		///     <para> 
+		///         这个 <see cref="IView"/> 实现是一个多例模式， 
+		///         所以你不应该直接调用构造函数， 
+		///         而是调用工厂方法
+		///			<c>View.GetInstance(multitonKey, key => new View(key))</c> 
+		///     </para> 
+		/// </remarks> 
+		/// <param name="key">视图的键</param> 
+		public View(string key)
+		{
+			multitonKey = key;
+			InstanceMap.TryAdd(key, new Lazy<IView>(() => this));
+			mediatorMap = new ConcurrentDictionary<string, IMediator>();
+			observerMap = new ConcurrentDictionary<string, IList<IObserver>>();
+			InitializeView();
+		}
 
-        /// <summary>
-        /// Initialize the Multiton View instance.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         Called automatically by the constructor, this
-        ///         is your opportunity to initialize the Multiton
-        ///         instance in your subclass without overriding the
-        ///         constructor.
-        ///     </para>
-        /// </remarks>
-        protected virtual void InitializeView()
-        {
-        }
+		/// <summary> 
+		/// 初始化 View 实例。 
+		/// </summary> 
+		/// <remarks> 
+		///     <para> 
+		///         由构造函数自动调用，这是您在不覆盖构造函数的情况下初始化实例的机会。 
+		///     </para> 
+		/// </remarks> 
+		protected virtual void InitializeView()
+		{
+		}
 
-        /// <summary>
-        /// <c>View</c> Multiton Factory method. 
-        /// </summary>
-        /// <param name="key">Key of view</param>
-        /// <param name="factory">the <c>FuncDelegate</c> of the <c>IView</c></param>
-        /// <returns>the instance for this Multiton key </returns>
-        public static IView GetInstance(string key, Func<string, IView> factory)
-        {
-            return InstanceMap.GetOrAdd(key, new Lazy<IView>(() => factory(key))).Value;
-        }
+		/// <summary> 
+		/// <c>View</c> 工厂方法 
+		/// </summary> 
+		/// <param name="key">视图的键</param> 
+		/// <param name="factory">用于创建 <see cref="IView"/> 的 <c>FuncDelegate</c></param> 
+		/// <returns>此键的实例</returns> 
+		public static IView GetInstance(string key, Func<string, IView> factory)
+		{
+			return InstanceMap.GetOrAdd(key, new Lazy<IView>(() => factory(key))).Value;
+		}
 
-        /// <summary>
-        ///     Register an <c>IObserver</c> to be notified
-        ///     of <c>INotifications</c> with a given name.
-        /// </summary>
-        /// <param name="notificationName">the name of the <c>INotifications</c> to notify this <c>IObserver</c> of</param>
-        /// <param name="observer">the <c>IObserver</c> to register</param>
-        public virtual void RegisterObserver(string notificationName, IObserver observer)
-        {
-            if (observerMap.TryGetValue(notificationName, out var observers))
-            {
-                observers.Add(observer);
-            }
-            else
-            {
-                observerMap.TryAdd(notificationName, new List<IObserver> { observer });
-            }
-        }
+		/// <summary> 
+		///     注册一个 <c>IObserver</c> 以便在给定名称的 <c>INotifications</c> 通知时收到通知。 
+		/// </summary> 
+		/// <param name="notificationName">要通知此 <c>IObserver</c> 的 <c>INotifications</c> 的名称</param> 
+		/// <param name="observer">要注册的 <c>IObserver</c></param> 
+		public virtual void RegisterObserver(string notificationName, IObserver observer)
+		{
+			if (observerMap.TryGetValue(notificationName, out var observers))
+			{
+				observers.Add(observer);
+			}
+			else
+			{
+				observerMap.TryAdd(notificationName, new List<IObserver>
+				                                     {
+					                                     observer
+				                                     });
+			}
+		}
 
-        /// <summary>
-        /// Notify the <c>IObservers</c> for a particular <c>INotification</c>.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         All previously attached <c>IObservers</c> for this <c>INotification</c>'s
-        ///         list are notified and are passed a reference to the <c>INotification</c> in
-        ///         the order in which they were registered.
-        ///     </para>
-        /// </remarks>
-        /// <param name="notification"></param>
-        public virtual void NotifyObservers(INotification notification)
-        {
-            // Get a reference to the observers list for this notification name
-            if (observerMap.TryGetValue(notification.Name, out var observersRef))
-            {
-                // Copy observers from reference array to working array, 
-                // since the reference array may change during the notification loop
-                var observers = new List<IObserver>(observersRef);
-                foreach (var observer in observers)
-                {
-                    observer.NotifyObserver(notification);
-                }
-            }
-        }
+		/// <summary> 
+		/// 通知特定 <c>INotification</c> 的 <c>IObservers</c>。 
+		/// </summary> 
+		/// <remarks> 
+		///     <para> 
+		///         所有先前附加到此 <c>INotification</c> 列表的 <c>IObservers</c> 都会按照注册的顺序收到通知，并传递一个对 <c>INotification</c> 的引用。 
+		///     </para> 
+		/// </remarks> 
+		/// <param name="notification"></param> 
+		public virtual void NotifyObservers(INotification notification)
+		{
+			// 获取此通知名称的观察者列表的引用
+			if (observerMap.TryGetValue(notification.Name, out var observersRef))
+			{
+				// 将观察者从引用数组复制到工作数组， 
+				// 因为在通知循环过程中引用数组可能会发生变化 
+				var observers = new List<IObserver>(observersRef);
+				foreach (var observer in observers)
+				{
+					observer.NotifyObserver(notification);
+				}
+			}
+		}
 
-        /// <summary>
-        /// Remove the observer for a given notifyContext from an observer list for a given Notification name.
-        /// </summary>
-        /// <param name="notificationName">which observer list to remove from </param>
-        /// <param name="notifyContext">remove the observer with this object as its notifyContext</param>
-        public virtual void RemoveObserver(string notificationName, object notifyContext)
-        {
-            if (observerMap.TryGetValue(notificationName, out var observers))
-            {
-                for (var i = 0; i < observers.Count; i++)
-                {
-                    if (observers[i].CompareNotifyContext(notifyContext))
-                    {
-                        observers.RemoveAt(i);
-                        break;
-                    }
-                }
+		/// <summary> 
+		/// 从给定通知名称的观察者列表中删除给定 notifyContext 的观察者。 
+		/// </summary> 
+		/// <param name="notificationName">要从中删除的观察者列表</param> 
+		/// <param name="notifyContext">删除具有此对象作为其 notifyContext 的观察者</param> 
+		public virtual void RemoveObserver(string notificationName, object notifyContext)
+		{
+			if (observerMap.TryGetValue(notificationName, out var observers))
+			{
+				for (var i = 0; i < observers.Count; i++)
+				{
+					if (observers[i].CompareNotifyContext(notifyContext))
+					{
+						observers.RemoveAt(i);
+						break;
+					}
+				}
 
-                // Also, when a Notification's Observer list length falls to
-                // zero, delete the notification key from the observer map
-                if (observers.Count == 0)
-                    observerMap.TryRemove(notificationName, out _);
-            }
-        }
+				// 同时，当通知的观察者列表长度减少到 
+				// 零时，从观察者映射中删除通知键 
+				if (observers.Count == 0)
+					observerMap.TryRemove(notificationName, out _);
+			}
+		}
 
-        /// <summary>
-        /// Register an <c>IMediator</c> instance with the <c>View</c>.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         Registers the <c>IMediator</c> so that it can be retrieved by name,
-        ///         and further interrogates the <c>IMediator</c> for its 
-        ///         <c>INotification</c> interests.
-        ///     </para>
-        ///     <para>
-        ///         If the <c>IMediator</c> returns any <c>INotification</c>
-        ///         names to be notified about, an <c>Observer</c> is created encapsulating 
-        ///         the <c>IMediator</c> instance's <c>handleNotification</c> method 
-        ///         and registering it as an <c>Observer</c> for all <c>INotifications</c> the
-        ///         <c>IMediator</c> is interested in.
-        ///     </para>
-        /// </remarks>
-        /// <param name="mediator">the name to associate with this <c>IMediator</c> instance</param>
-        public virtual void RegisterMediator(IMediator mediator)
-        {
-            if(mediatorMap.TryAdd(mediator.MediatorName, mediator))
-            {
-                mediator.InitializeNotifier(multitonKey);
+		/// <summary> 
+		/// 使用 <c>View</c> 注册一个 <c>IMediator</c> 实例。 
+		/// </summary> 
+		/// <remarks> 
+		///     <para> 
+		///         注册 <c>IMediator</c> 以便可以通过名称检索， 
+		///         并进一步询问 <c>IMediator</c> 其 
+		///         <c>INotification</c> 的兴趣。 
+		///     </para> 
+		///     <para> 
+		///         如果 <c>IMediator</c> 返回任何要通知的 <c>INotification</c> 
+		///         名称，将创建一个封装了 
+		///         <c>IMediator</c> 实例的 <c>handleNotification</c> 方法 
+		///         的 <c>Observer</c> 并将其注册为所有 <c>INotifications</c> 的 <c>Observer</c>，这些 <c>INotifications</c> 是 
+		///         <c>IMediator</c> 感兴趣的。 
+		///     </para> 
+		/// </remarks> 
+		/// <param name="mediator">与此 <c>IMediator</c> 实例关联的名称</param> 
+		public virtual void RegisterMediator(IMediator mediator)
+		{
+			if (mediatorMap.TryAdd(mediator.MediatorName, mediator))
+			{
+				mediator.InitializeNotifier(multitonKey);
 
-                var interests = mediator.ListNotificationInterests();
+				var interests = mediator.ListNotificationInterests();
 
-                if (interests.Length > 0)
-                {
-                    IObserver observer = new Observer(mediator.HandleNotification, mediator);
-                    foreach (var interest in interests)
-                    {
-                        RegisterObserver(interest, observer);
-                    }
-                }
-                // alert the mediator that it has been registered
-                mediator.OnRegister();
-            }
-        }
+				if (interests.Length > 0)
+				{
+					IObserver observer = new Observer(mediator.HandleNotification, mediator);
+					foreach (var interest in interests)
+					{
+						RegisterObserver(interest, observer);
+					}
+				}
 
-        /// <summary>
-        /// Retrieve an <c>IMediator</c> from the <c>View</c>.
-        /// </summary>
-        /// <param name="mediatorName">the name of the <c>IMediator</c> instance to retrieve.</param>
-        /// <returns>the <c>IMediator</c> instance previously registered with the given <c>mediatorName</c>.</returns>
-        public virtual IMediator GetMediator(string mediatorName)
-        {
-            return mediatorMap.TryGetValue(mediatorName, out var mediator) ? mediator : null;
-        }
+				// 通知中介已注册 
+				mediator.OnRegister();
+			}
+		}
 
-        /// <summary>
-        /// Remove an <c>IMediator</c> from the <c>View</c>.
-        /// </summary>
-        /// <param name="mediatorName">name of the <c>IMediator</c> instance to be removed.</param>
-        /// <returns>the <c>IMediator</c> that was removed from the <c>View</c></returns>
-        public virtual IMediator RemoveMediator(string mediatorName)
-        {
-            if (mediatorMap.TryRemove(mediatorName, out var mediator))
-            {
-                var interests = mediator.ListNotificationInterests();
-                foreach (var interest in interests)
-                {
-                    RemoveObserver(interest, mediator);
-                }
-                mediator.OnRemove();
-            }
-            return mediator;
-        }
+		/// <summary> 
+		/// 从 <c>View</c> 中检索一个 <c>IMediator</c>。 
+		/// </summary> 
+		/// <param name="mediatorName">要检索的 <c>IMediator</c> 实例的名称。</param> 
+		/// <returns>先前使用给定的 <c>mediatorName</c> 注册的 <c>IMediator</c> 实例。</returns> 
+		public virtual IMediator GetMediator(string mediatorName)
+		{
+			return mediatorMap.TryGetValue(mediatorName, out var mediator) ? mediator : null;
+		}
 
-        /// <summary>
-        /// Check if a Mediator is registered or not
-        /// </summary>
-        /// <param name="mediatorName"></param>
-        /// <returns>whether a Mediator is registered with the given <c>mediatorName</c>.</returns>
-        public virtual bool HasMediator(string mediatorName)
-        {
-            return mediatorMap.ContainsKey(mediatorName);
-        }
+		/// <summary> 
+		/// 从视图中删除一个IMediator。 
+		/// </summary> 
+		/// <param name="mediatorName">要删除的IMediator实例的名称。</param> 
+		/// <returns>从视图中删除的IMediator。</returns> 
+		public virtual IMediator RemoveMediator(string mediatorName)
+		{
+			if (mediatorMap.TryRemove(mediatorName, out var mediator))
+			{
+				var interests = mediator.ListNotificationInterests();
+				foreach (var interest in interests)
+				{
+					RemoveObserver(interest, mediator);
+				}
+				mediator.OnRemove();
+			}
+			return mediator;
+		}
 
-        /// <summary>
-        /// Remove an IView instance
-        /// </summary>
-        /// <param name="key">multitonKey of IView instance to remove</param>
-        public static void RemoveView(string key)
-        {
-            InstanceMap.TryRemove(key, out _);
-        }
+		/// <summary> 
+		/// 检查是否已注册中介器。 
+		/// </summary> 
+		/// <param name="mediatorName"></param> 
+		/// <returns>是否已使用给定的中介器名称注册了中介器。</returns> 
+		public virtual bool HasMediator(string mediatorName)
+		{
+			return mediatorMap.ContainsKey(mediatorName);
+		}
 
-        /// <summary>The Multiton Key for this Core</summary>
-        protected readonly string multitonKey;
+		/// <summary> 
+		/// 删除一个IView实例。 
+		/// </summary> 
+		/// <param name="key">要删除的IView实例的multitonKey。</param> 
+		public static void RemoveView(string key)
+		{
+			InstanceMap.TryRemove(key, out _);
+		}
 
-        /// <summary>Mapping of Mediator names to Mediator instances</summary>
-        protected readonly ConcurrentDictionary<string, IMediator> mediatorMap;
+		/// <summary>
+		/// 此核心的多例键。
+		/// </summary> 
+		protected readonly string multitonKey;
 
-        /// <summary>Mapping of Notification names to Observer lists</summary>
-        protected readonly ConcurrentDictionary<string, IList<IObserver>> observerMap;
+		/// <summary>
+		/// 中介器名称到中介器实例的映射。
+		/// </summary> 
+		protected readonly ConcurrentDictionary<string, IMediator> mediatorMap;
 
-        /// <summary>The Multiton View instanceMap.</summary>
-        protected static readonly ConcurrentDictionary<string, Lazy<IView>> InstanceMap = new ConcurrentDictionary<string, Lazy<IView>>();
+		/// <summary>
+		/// 通知名称到观察者列表的映射。
+		/// </summary> 
+		protected readonly ConcurrentDictionary<string, IList<IObserver>> observerMap;
 
-    }
+		/// <summary>
+		/// 多例视图实例映射。
+		/// </summary> 
+		protected static readonly ConcurrentDictionary<string, Lazy<IView>> InstanceMap = new ConcurrentDictionary<string, Lazy<IView>>();
+	}
 }

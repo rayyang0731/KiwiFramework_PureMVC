@@ -1,145 +1,124 @@
-﻿//
-//  PureMVC C# Multicore
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
-
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 
 using KiwiFramework.PureMVC.Interfaces;
 
 namespace KiwiFramework.PureMVC.Core
 {
-    /// <summary>
-    /// A Multiton <c>IModel</c> implementation
-    /// </summary>
-    /// <remarks>
-    ///     <para>In PureMVC, the <c>Model</c> class provides access to model objects (Proxies) by named lookup</para>
-    ///     <para>The <c>Model</c> assumes these responsibilities:</para>
-    ///     <list type="bullet">
-    ///         <item>Maintain a cache of <c>IProxy</c> instances</item>
-    ///         <item>Provide methods for registering, retrieving, and removing <c>IProxy</c> instances</item>
-    ///     </list>
-    ///     <para>
-    ///         Your application must register <c>IProxy</c> instances
-    ///         with the <c>Model</c>. Typically, you use an 
-    ///         <c>ICommand</c> to create and register <c>IProxy</c> 
-    ///         instances once the <c>Facade</c> has initialized the Core actors
-    ///     </para>
-    /// </remarks>
-    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Proxy"/>
-    /// <seealso cref="PureMVC.Interfaces.IProxy" />
-    public class Model: IModel
-    {
-        /// <summary>
-        /// Constructs and initializes a new model
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         This <c>IModel</c> implementation is a Multiton, 
-        ///         so you should not call the constructor 
-        ///         directly, but instead call the static Multiton 
-        ///         Factory method <c>Model.getInstance(multitonKey, key => new Model(key))</c>
-        ///     </para>
-        /// </remarks>
-        /// <param name="key">Key of model</param>
-        public Model(string key)
-        {
-            multitonKey = key;
-            InstanceMap.TryAdd(key, new Lazy<IModel>(() => this));
-            proxyMap = new ConcurrentDictionary<string, IProxy>();
-            InitializeModel();
-        }
+	/// <summary> 
+	/// <see cref="IModel"/> 的实现(多例模式)
+	/// </summary> 
+	public class Model : IModel
+	{
+		/// <summary> 
+		/// 构造并初始化一个新的模型 
+		/// </summary> 
+		/// <remarks> 
+		///     <para> 
+		///         这个<see cref="IModel"/>实现是一个多例，  
+		///         所以你不应该直接调用构造函数,
+		///         而是调用静态多例工厂方法<c>Model.GetInstance(multitonKey, key => new Model(key))</c> 
+		///     </para> 
+		/// </remarks> 
+		/// <param name="key">模型的键</param> 
+		public Model(string key)
+		{
+			multitonKey = key;
+			InstanceMap.TryAdd(key, new Lazy<IModel>(() => this));
+			proxyMap = new ConcurrentDictionary<string, IProxy>();
+			InitializeModel();
+		}
 
-        /// <summary>
-        /// Initialize the Multiton <c>Model</c> instance.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         Called automatically by the constructor, this 
-        ///         is your opportunity to initialize the Multiton 
-        ///         instance in your subclass without overriding the 
-        ///         constructor
-        ///     </para>
-        /// </remarks>
-        protected virtual void InitializeModel()
-        {
-        }
+		/// <summary> 
+		/// 初始化多例<c>Model</c>实例。 
+		/// </summary> 
+		/// <remarks> 
+		///     <para> 
+		///         构造函数自动调用，这是您在子类中初始化多例实例的机会，而无需重写构造函数 
+		///     </para> 
+		/// </remarks> 
+		protected virtual void InitializeModel()
+		{
+		}
 
-        /// <summary>
-        /// <c>Model</c> Multiton Factory method. 
-        /// </summary>
-        /// <param name="key">Key of model</param>
-        /// <param name="factory">the <c>FuncDelegate</c> of the <c>IModel</c></param>
-        /// <returns>the instance for this Multiton key </returns>
-        public static IModel GetInstance(string key, Func<string, IModel> factory)
-        {
-            return InstanceMap.GetOrAdd(key, new Lazy<IModel>(() => factory(key))).Value;
-        }
+		/// <summary> 
+		/// <c>Model</c>多例工厂方法。  
+		/// </summary> 
+		/// <param name="key">模型的键</param> 
+		/// <param name="factory"> <see cref="IModel"/>的<c>FuncDelegate</c> </param> 
+		/// <returns>此多例键的实例</returns> 
+		public static IModel GetInstance(string key, Func<string, IModel> factory)
+		{
+			return InstanceMap.GetOrAdd(key, new Lazy<IModel>(() => factory(key))).Value;
+		}
 
-        /// <summary>
-        /// Register an <c>IProxy</c> with the <c>Model</c>.
-        /// </summary>
-        /// <param name="proxy">proxy an <c>IProxy</c> to be held by the <c>Model</c>.</param>
-        public virtual void RegisterProxy(IProxy proxy)
-        {
-            proxy.InitializeNotifier(multitonKey);
-            proxyMap[proxy.ProxyName] = proxy;
-            proxy.OnRegister();
-        }
+		/// <summary> 
+		/// 在<c>Model</c>中注册一个<c>IProxy</c>。 
+		/// </summary> 
+		/// <param name="proxy">代理一个要由<c>Model</c>持有的<c>IProxy</c>。</param>
+		public virtual void RegisterProxy(IProxy proxy)
+		{
+			proxy.InitializeNotifier(multitonKey);
+			proxyMap[proxy.ProxyName] = proxy;
+			proxy.OnRegister();
+		}
 
-        /// <summary>
-        /// Retrieve an <c>IProxy</c> from the <c>Model</c>.
-        /// </summary>
-        /// <param name="proxyName"></param>
-        /// <returns>the <c>IProxy</c> instance previously registered with the given <c>proxyName</c>.</returns>
-        public virtual IProxy GetProxy(string proxyName)
-        {
-            return proxyMap.TryGetValue(proxyName, out var proxy) ? proxy : null;
-        }
+		/// <summary> 
+		/// 从<c>Model</c>中检索一个<c>IProxy</c>。 
+		/// </summary> 
+		/// <param name="proxyName"></param> 
+		/// <returns>先前使用给定的<c>proxyName</c>注册的<c>IProxy</c>实例。</returns>
+		public virtual IProxy GetProxy(string proxyName)
+		{
+			return proxyMap.TryGetValue(proxyName, out var proxy) ? proxy : null;
+		}
 
-        /// <summary>
-        /// Remove an <c>IProxy</c> from the <c>Model</c>.
-        /// </summary>
-        /// <param name="proxyName">proxyName name of the <c>IProxy</c> instance to be removed.</param>
-        /// <returns>the <c>IProxy</c> that was removed from the <c>Model</c></returns>
-        public virtual IProxy RemoveProxy(string proxyName)
-        {
-            if (proxyMap.TryRemove(proxyName, out var proxy))
-            {
-                proxy.OnRemove();
-            }
-            return proxy;
-        }
+		/// <summary> 
+		/// 从<c>Model</c>中删除一个<c>IProxy</c>。 
+		/// </summary> 
+		/// <param name="proxyName">proxyName 要删除的<c>IProxy</c>实例的名称。</param> 
+		/// <returns>从<c>Model</c>中删除的<c>IProxy</c></returns> 
+		public virtual IProxy RemoveProxy(string proxyName)
+		{
+			if (proxyMap.TryRemove(proxyName, out var proxy))
+			{
+				proxy.OnRemove();
+			}
+			return proxy;
+		}
 
-        /// <summary>
-        /// Check if a Proxy is registered
-        /// </summary>
-        /// <param name="proxyName"></param>
-        /// <returns>whether a Proxy is currently registered with the given <c>proxyName</c>.</returns>
-        public virtual bool HasProxy(string proxyName)
-        {
-            return proxyMap.ContainsKey(proxyName);
-        }
+		/// <summary> 
+		/// 检查是否注册了代理 
+		/// </summary> 
+		/// <param name="proxyName"></param> 
+		/// <returns>当前是否已使用给定的<c>proxyName</c>注册代理。</returns> 
+		public virtual bool HasProxy(string proxyName)
+		{
+			return proxyMap.ContainsKey(proxyName);
+		}
 
-        /// <summary>
-        /// Remove an IModel instance
-        /// </summary>
-        /// <param name="key">multitonKey of IModel instance to remove</param>
-        public static void RemoveModel(string key)
-        {
-            InstanceMap.TryRemove(key, out _);
-        }
+		/// <summary> 
+		/// 删除一个IModel实例 
+		/// </summary> 
+		/// <param name="key">要删除的IModel实例的multitonKey</param> 
+		public static void RemoveModel(string key)
+		{
+			InstanceMap.TryRemove(key, out _);
+		}
 
-        /// <summary>The Multiton Key for this Core</summary>
-        protected readonly string multitonKey;
+		/// <summary>
+		/// 此核心的多例键
+		/// </summary>
+		protected readonly string multitonKey;
 
-        /// <summary>Mapping of proxyNames to IProxy instances</summary>
-        protected readonly ConcurrentDictionary<string, IProxy> proxyMap;
+		/// <summary>
+		/// 代理名称到IProxy实例的映射
+		/// </summary>
+		protected readonly ConcurrentDictionary<string, IProxy> proxyMap;
 
-        /// <summary>The Multiton Model instanceMap.</summary>
-        protected static readonly ConcurrentDictionary<string, Lazy<IModel>> InstanceMap = new ConcurrentDictionary<string, Lazy<IModel>>();
-    }
+		/// <summary>
+		/// 多例模型实例映射.
+		/// </summary>
+		protected static readonly ConcurrentDictionary<string, Lazy<IModel>> InstanceMap = new ConcurrentDictionary<string, Lazy<IModel>>();
+	}
 }

@@ -1,55 +1,47 @@
-﻿//
-//  PureMVC C# Multicore
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
-
-namespace KiwiFramework.PureMVC.Interfaces
+﻿namespace KiwiFramework.PureMVC.Interfaces
 {
-    /// <summary>
-    /// The interface definition for a PureMVC Model.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         In PureMVC, <c>IModel</c> implementors provide
-    ///         access to <c>IProxy</c> objects by named lookup.
-    ///     </para>
-    ///     <para>
-    ///         An <c>IModel</c> assumes these responsibilities:
-    ///         <list type="bullet">
-    ///             <item>Maintain a cache of <c>IProxy</c> instances</item>
-    ///             <item>Provide methods for registering, retrieving, and removing <c>IProxy</c> instances</item>
-    ///         </list>
-    ///     </para>
-    /// </remarks>
-    public interface IModel
-    {
-        /// <summary>
-        /// Register an <c>IProxy</c> instance with the <c>Model</c>.
-        /// </summary>
-        /// <param name="proxy">an object reference to be held by the <c>Model</c>.</param>
-        void RegisterProxy(IProxy proxy);
+	/// <summary> 
+	/// PureMVC Model的接口定义。 
+	/// </summary> 
+	/// <remarks> 
+	///     <para> 
+	///         在PureMVC中，<c>IModel</c>实现者通过命名查找提供对<c>IProxy</c>对象的访问。 
+	///     </para> 
+	///     <para> 
+	///         <c>IModel</c>承担以下职责： 
+	///         <list type="bullet"> 
+	///             <item>维护<c>IProxy</c>实例的缓存</item> 
+	///             <item>提供注册、检索和删除<c>IProxy</c>实例的方法</item> 
+	///         </list> 
+	///     </para> 
+	/// </remarks> 
+	public interface IModel
+	{
+		/// <summary> 
+		/// 在<c>Model</c>中注册一个<c>IProxy</c>实例。 
+		/// </summary> 
+		/// <param name="proxy">要由<c>Model</c>持有的对象引用。</param> 
+		void RegisterProxy(IProxy proxy);
 
-        /// <summary>
-        /// Retrieve an <c>IProxy</c> instance from the Model.
-        /// </summary>
-        /// <param name="proxyName"></param>
-        /// <returns>the <c>IProxy</c> instance previously registered with the given <c>proxyName</c>.</returns>
-        IProxy GetProxy(string proxyName);
+		/// <summary> 
+		/// 从Model中检索一个<c>IProxy</c>实例。 
+		/// </summary> 
+		/// <param name="proxyName"></param> 
+		/// <returns>以前使用给定的<c>proxyName</c>注册的<c>IProxy</c>实例。</returns> 
+		IProxy GetProxy(string proxyName);
 
-        /// <summary>
-        /// Remove an <c>IProxy</c> instance from the Model.
-        /// </summary>
-        /// <param name="proxyName"></param>
-        /// <returns>the <c>IProxy</c> that was removed from the <c>Model</c></returns>
-        IProxy RemoveProxy(string proxyName);
+		/// <summary> 
+		/// 从Model中移除一个<c>IProxy</c>实例。 
+		/// </summary> 
+		/// <param name="proxyName"></param> 
+		/// <returns>从<c>Model</c>中移除的<c>IProxy</c>。</returns> 
+		IProxy RemoveProxy(string proxyName);
 
-        /// <summary>
-        /// Check if a Proxy is registered
-        /// </summary>
-        /// <param name="proxyName"></param>
-        /// <returns>whether a Proxy is currently registered with the given <c>proxyName</c>.</returns>
-        bool HasProxy(string proxyName);
-    }
+		/// <summary> 
+		/// 检查是否已注册代理 
+		/// </summary> 
+		/// <param name="proxyName"></param> 
+		/// <returns>是否当前使用给定的<c>proxyName</c>注册了代理。</returns> 
+		bool HasProxy(string proxyName);
+	}
 }

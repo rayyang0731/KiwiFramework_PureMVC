@@ -1,71 +1,45 @@
-﻿//
-//  PureMVC C# Multicore
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
-
-namespace KiwiFramework.PureMVC.Interfaces
+﻿namespace KiwiFramework.PureMVC.Interfaces
 {
-    /// <summary>
-    /// A base <c>INotification</c> implementation.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         PureMVC does not rely upon underlying event models such 
-    ///         as the one provided with Flash, and ActionScript 3 does 
-    ///         not have an inherent event model.
-    ///     </para>
-    ///     <para>
-    ///         The Observer Pattern as implemented within PureMVC exists 
-    ///         to support event-driven communication between the 
-    ///         application and the actors of the MVC triad.
-    ///     </para>
-    ///     <para>
-    ///         Notifications are not meant to be a replacement for Events
-    ///         in Flex/Flash/Apollo. Generally, <c>IMediator</c> implementors
-    ///         place event listeners on their view components, which they
-    ///         then handle in the usual way. This may lead to the broadcast of <c>Notification</c>s to 
-    ///         trigger <c>ICommand</c>s or to communicate with other <c>IMediators</c>. 
-    ///         <c>IProxy</c> and <c>ICommand</c>
-    ///         instances communicate with each other and <c>IMediator</c>s
-    ///         by broadcasting <c>INotification</c>s.
-    ///     </para>
-    ///     <para>
-    ///         A key difference between Flash <c>Event</c>s and PureMVC
-    ///         <c>Notification</c>s is that <c>Event</c>s follow the 
-    ///         'Chain of Responsibility' pattern, 'bubbling' up the display hierarchy 
-    ///         until some parent component handles the <c>Event</c>, while
-    ///         PureMVC <c>Notification</c>s follow a 'Publish/Subscribe'
-    ///         pattern. PureMVC classes need not be related to each other in a 
-    ///         parent/child relationship in order to communicate with one another
-    ///         using <c>Notification</c>s.
-    ///     </para>
-    /// </remarks>
-    /// <seealso cref="IView"/>
-    /// <seealso cref="IObserver"/>
+    /// <summary> 
+    /// 基础<c>INotification</c>实现。 
+    /// </summary> 
+    /// <remarks> 
+    ///     <para> 
+    ///         PureMVC不依赖于底层事件模型，例如Flash提供的事件模型，而ActionScript 3没有固有的事件模型。 
+    ///     </para> 
+    ///     <para> 
+    ///         PureMVC中实现的观察者模式存在的目的是支持应用程序和MVC三元组的角色之间的事件驱动通信。 
+    ///     </para> 
+    ///     <para> 
+    ///         通知不是Flex/Flash/Apollo中事件的替代品。通常，<c>IMediator</c>实现者在其视图组件上放置事件侦听器，然后以通常的方式处理它们。这可能会导致广播<c>Notification</c>来触发<c>ICommand</c>或与其他<c>IMediator</c>通信。<c>IProxy</c>和<c>ICommand</c>实例通过广播<c>INotification</c>相互通信，以及<c>IMediator</c>。 
+    ///     </para> 
+    ///     <para> 
+    ///         Flash<c>Event</c>和PureMVC<c>Notification</c>之间的一个关键区别是，<c>Event</c>遵循“责任链”模式，在显示层次结构中“冒泡”，直到某个父组件处理<c>Event</c>，而PureMVC<c>Notification</c>遵循“发布/订阅”模式。 PureMVC类不必在父/子关系中彼此相关，以便使用<c>Notification</c>相互通信。 
+    ///     </para> 
+    /// </remarks> 
+    /// <seealso cref="IView"/> 
+    /// <seealso cref="IObserver"/> 
     public interface INotification
     {
-        /// <summary>
-        /// Get the name of the <c>INotification</c> instance. 
-        /// No setter, should be set by constructor only
-        /// </summary>
+        /// <summary> 
+        /// 获取<c>INotification</c>实例的名称。没有setter，只能由构造函数设置。 
+        /// </summary> 
         string Name { get; }
 
-        /// <summary>
-        /// Get or Set the body of the <c>INotification</c> instance
-        /// </summary>
+        /// <summary> 
+        /// 获取或设置<c>INotification</c>实例的主体 
+        /// </summary> 
         object Body { get; set; }
 
-        /// <summary>
-        /// Get or Set the type of the <c>INotification</c> instance
-        /// </summary>
+        /// <summary> 
+        /// 获取或设置<c>INotification</c>实例的类型 
+        /// </summary> 
         string Type { get; set; }
 
-        /// <summary>
-        /// Get the string representation of the <c>INotification</c> instance
-        /// </summary>
-        /// <returns>String representation</returns>
+        /// <summary> 
+        /// 获取<c>INotification</c>实例的字符串表示形式 
+        /// </summary> 
+        /// <returns>字符串表示形式</returns> 
         string ToString();
     }
 }

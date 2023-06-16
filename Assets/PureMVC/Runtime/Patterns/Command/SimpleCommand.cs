@@ -1,41 +1,29 @@
-﻿//
-//  PureMVC C# Multicore
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
-
-using KiwiFramework.PureMVC.Interfaces;
-using KiwiFramework.PureMVC.Patterns;
+﻿using KiwiFramework.PureMVC.Interfaces;
 
 namespace KiwiFramework.PureMVC.Patterns
 {
-    /// <summary>
-    /// A base <c>ICommand</c> implementation.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         Your subclass should override the <c>execute</c> 
-    ///         method where your business logic will handle the <c>INotification</c>. 
-    ///     </para>
-    /// </remarks>
-    /// <seealso cref="PureMVC.Core.Controller"/>
-    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Notification"/>
-    /// <seealso cref="MacroCommand"/>
+    /// <summary> 
+    /// 基本的<c>ICommand</c>实现。 
+    /// </summary> 
+    /// <remarks> 
+    ///     <para> 
+    ///         您的子类应该重写<c>execute</c>方法，在其中处理您的业务逻辑<c>INotification</c>。 
+    ///     </para> 
+    /// </remarks> 
+    /// <seealso cref="PureMVC.Core.Controller"/> 
+    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Notification"/> 
+    /// <seealso cref="MacroCommand"/> 
     public class SimpleCommand : Notifier, ICommand
     {
-        /// <summary>
-        /// Fulfill the use-case initiated by the given <c>INotification</c>.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         In the Command Pattern, an application use-case typically
-        ///         begins with some user action, which results in an <c>INotification</c> being broadcast, which 
-        ///         is handled by business logic in the <c>execute</c> method of an
-        ///         <c>ICommand</c>.
-        ///     </para>
-        /// </remarks>
-        /// <param name="notification">the <c>INotification</c> to handle.</param>
+        /// <summary> 
+        /// 执行给定的<c>INotification</c>所启动的用例。 
+        /// </summary> 
+        /// <remarks> 
+        ///     <para> 
+        ///         在命令模式中，应用程序用例通常以某些用户操作开始，该操作导致广播<c>INotification</c>，该<c>INotification</c>由<c>ICommand</c>的<c>execute</c>方法中的业务逻辑处理。 
+        ///     </para> 
+        /// </remarks> 
+        /// <param name="notification">要处理的<c>INotification</c>。</param> 
         public virtual void Execute(INotification notification)
         {
         }

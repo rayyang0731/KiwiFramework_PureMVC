@@ -1,80 +1,63 @@
-﻿//
-//  PureMVC C# Multicore
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
-
-using System;
+﻿using System;
 
 namespace KiwiFramework.PureMVC.Interfaces
 {
-    /// <summary>
-    /// The interface definition for a PureMVC Observer.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         In PureMVC, the <c>Observer</c> class assumes these responsibilities:
-    ///         <list type="bullet">
-    ///             <item>Encapsulate the notification (callback) method of the interested object.</item>
-    ///             <item>Encapsulate the notification context (this) of the interested object.</item>
-    ///             <item>Provide methods for setting the notification method and context.</item>
-    ///             <item>Provide a method for notifying the interested object.</item>
-    ///         </list>
-    ///     </para>
-    ///     <para>
-    ///         PureMVC does not rely upon underlying event models such 
-    ///         as the one provided with Flash, and ActionScript 3 does 
-    ///         not have an inherent event model.
-    ///     </para>
-    ///     <para>
-    ///         The Observer Pattern as implemented within PureMVC exists 
-    ///         to support event-driven communication between the 
-    ///         application and the actors of the MVC triad.
-    ///     </para>
-    ///     <para>
-    ///         An Observer is an object that encapsulates information
-    ///         about an interested object with a notification method that
-    ///         should be called when an <c>INotification</c> is broadcast. The Observer then
-    ///         acts as a proxy for notifying the interested object.
-    ///     </para>
-    ///     <para>
-    ///         Observers can receive <c>Notification</c>s by having their
-    ///         <c>notifyObserver</c> method invoked, passing
-    ///         in an object implementing the <c>INotification</c> interface, such
-    ///         as a subclass of <c>Notification</c>.
-    ///     </para>
-    /// </remarks>
-    /// <seealso cref="IView"/>
-    /// <seealso cref="INotification"/>
-    public interface IObserver
-    {
-        /// <summary>
-        /// Set the notification method (callback) method of the interested object
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         The notification method should take one parameter of type <c>INotification</c>
-        ///     </para>
-        /// </remarks>
-        Action<INotification> NotifyMethod { set; }
+	/// <summary> 
+	/// PureMVC Observer 的接口定义。 
+	/// </summary> 
+	/// <remarks> 
+	/// <para> 
+	/// 在 PureMVC 中，Observer 类承担以下职责： 
+	/// <list type="bullet"> 
+	/// <item>封装感兴趣对象的通知（回调）方法。</item> 
+	/// <item>封装感兴趣对象的通知上下文（this）。</item> 
+	/// <item>提供设置通知方法和上下文的方法。</item> 
+	/// <item>提供通知感兴趣对象的方法。</item> 
+	/// </list> 
+	/// </para> 
+	/// <para> 
+	/// PureMVC 不依赖于底层事件模型，例如 Flash 提供的模型，而 ActionScript 3 没有固有的事件模型。 
+	/// </para> 
+	/// <para> 
+	/// PureMVC 中实现的观察者模式存在的目的是支持应用程序和 MVC 三元组的参与者之间的事件驱动通信。 
+	/// </para> 
+	/// <para> 
+	/// 观察者是一个封装有关感兴趣对象的信息的对象，具有应在广播 INotification 时调用的通知方法。然后，观察者作为通知感兴趣对象的代理。 
+	/// </para> 
+	/// <para> 
+	/// 观察者可以通过调用其 notifyObserver 方法来接收通知，传递实现 INotification 接口的对象，例如 Notification 的子类。 
+	/// </para> 
+	/// </remarks> 
+	/// <seealso cref="IView"/> 
+	/// <seealso cref="INotification"/> 
+	public interface IObserver
+	{
+		/// <summary> 
+		/// 设置感兴趣对象的通知方法（回调）方法 
+		/// </summary> 
+		/// <remarks> 
+		/// <para> 
+		/// 通知方法应该接受一个类型为 INotification 的参数 
+		/// </para> 
+		/// </remarks> 
+		Action<INotification> NotifyMethod { set; }
 
-        /// <summary>
-        /// Set the notification context (this) of the interested object
-        /// </summary>
-        object NotifyContext { set; }
+		/// <summary> 
+		/// 设置感兴趣对象的通知上下文（this） 
+		/// </summary> 
+		object NotifyContext { set; }
 
-        /// <summary>
-        /// Notify the interested object.
-        /// </summary>
-        /// <param name="notification">the <c>INotification</c> to pass to the interested object's notification method</param>
-        void NotifyObserver(INotification notification);
+		/// <summary> 
+		/// 通知感兴趣的对象。 
+		/// </summary> 
+		/// <param name="notification">要传递给感兴趣对象的通知 INotification</param> 
+		void NotifyObserver(INotification notification);
 
-        /// <summary>
-        /// Compare the given object to the notification context object.
-        /// </summary>
-        /// <param name="obj">the object to compare.</param>
-        /// <returns>indicating if the notification context and the object are the same.</returns>
-        bool CompareNotifyContext(object obj);
-    }
+		/// <summary> 
+		/// 将给定对象与通知上下文对象进行比较。 
+		/// </summary> 
+		/// <param name="obj">要比较的对象。</param> 
+		/// <returns>指示通知上下文和对象是否相同。</returns> 
+		bool CompareNotifyContext(object obj);
+	}
 }

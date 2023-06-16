@@ -1,79 +1,73 @@
-﻿//
-//  PureMVC C# Multicore
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
-
-using System;
+﻿using System;
 
 using KiwiFramework.PureMVC.Interfaces;
 
 namespace KiwiFramework.PureMVC.Patterns
 {
-    /// <summary>
-    /// A base <c>IObserver</c> implementation.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         An <c>Observer</c> is an object that encapsulates information
-    ///         about an interested object with a method that should 
-    ///         be called when a particular <c>INotification</c> is broadcast. 
-    ///     </para>
-    ///     <para>
-    ///         In PureMVC, the <c>Observer</c> class assumes these responsibilities:
-    ///         <list type="bullet">
-    ///             <item>Encapsulate the notification (callback) method of the interested object.</item>
-    ///             <item>Encapsulate the notification context (this) of the interested object.</item>
-    ///             <item>Provide methods for setting the notification method and context.</item>
-    ///             <item>Provide a method for notifying the interested object.</item>
-    ///         </list>
-    ///     </para>
-    /// </remarks>
-    /// <seealso cref="PureMVC.Core.View"/>
-    /// <seealso cref="Notification"/>
-    public class Observer: IObserver
-    {
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         The notification method on the interested object should take 
-        ///         one parameter of type <c>INotification</c>
-        ///     </para>
-        /// </remarks>
-        /// <param name="notifyMethod">the notification method of the interested object</param>
-        /// <param name="notifyContext">the notification context of the interested object</param>
-        public Observer(Action<INotification> notifyMethod, object notifyContext)
-        {
-            NotifyMethod = notifyMethod;
-            NotifyContext = notifyContext;
-        }
+	/// <summary> 
+	/// 基础的 <c>IObserver</c> 实现。 
+	/// </summary> 
+	/// <remarks> 
+	///     <para> 
+	///         <c>Observer</c> 是一个封装了感兴趣对象以及当特定 <c>INotification</c> 被广播时应调用的方法的对象。 
+	///     </para> 
+	///     <para> 
+	///         在 PureMVC 中，<c>Observer</c> 类承担以下职责： 
+	///         <list type="bullet"> 
+	///             <item>封装感兴趣对象的通知（回调）方法。</item> 
+	///             <item>封装感兴趣对象的通知上下文（this）。</item> 
+	///             <item>提供设置通知方法和上下文的方法。</item> 
+	///             <item>提供通知感兴趣对象的方法。</item> 
+	///         </list> 
+	///     </para> 
+	/// </remarks> 
+	/// <seealso cref="PureMVC.Core.View"/> 
+	/// <seealso cref="Notification"/> 
+	public class Observer : IObserver
+	{
+		/// <summary> 
+		/// 构造函数。 
+		/// </summary> 
+		/// <remarks> 
+		///     <para> 
+		///         感兴趣对象的通知方法应该接受一个类型为 <c>INotification</c> 的参数。 
+		///     </para> 
+		/// </remarks> 
+		/// <param name="notifyMethod">感兴趣对象的通知方法</param> 
+		/// <param name="notifyContext">感兴趣对象的通知上下文</param> 
+		public Observer(Action<INotification> notifyMethod, object notifyContext)
+		{
+			NotifyMethod  = notifyMethod;
+			NotifyContext = notifyContext;
+		}
 
-        /// <summary>
-        /// Notify the interested object.
-        /// </summary>
-        /// <param name="notification">the <c>INotification</c> to pass to the interested object's notification method.</param>
-        public virtual void NotifyObserver(INotification notification)
-        {
-            NotifyMethod(notification);
-        }
+		/// <summary> 
+		/// 通知感兴趣对象。 
+		/// </summary> 
+		/// <param name="notification">要传递给感兴趣对象的通知 <c>INotification</c>。</param> 
+		public virtual void NotifyObserver(INotification notification)
+		{
+			NotifyMethod(notification);
+		}
 
-        /// <summary>
-        /// Compare an object to the notification context. 
-        /// </summary>
-        /// <param name="obj">the object to compare</param>
-        /// <returns>indicating if the object and the notification context are the same</returns>
-        public virtual bool CompareNotifyContext(object obj)
-        {
-            return NotifyContext.Equals(obj);
-        }
+		/// <summary> 
+		/// 将对象与通知上下文进行比较。 
+		/// </summary> 
+		/// <param name="obj">要比较的对象</param> 
+		/// <returns>指示对象和通知上下文是否相同</returns> 
+		public virtual bool CompareNotifyContext(object obj)
+		{
+			return NotifyContext.Equals(obj);
+		}
 
-        /// <summary>Callback method</summary>
-        public Action<INotification> NotifyMethod { get; set; }
+		/// <summary>
+		/// 回调方法
+		/// </summary> 
+		public Action<INotification> NotifyMethod { get; set; }
 
-        /// <summary>Context object</summary>
-        public object NotifyContext { get; set; }
-    }
+		/// <summary>
+		/// 上下文对象
+		/// </summary> 
+		public object NotifyContext { get; set; }
+	}
 }

@@ -8,7 +8,7 @@ using System.Collections.Concurrent;
 namespace KiwiFramework.PureMVC.Patterns
 {
 	/// <summary>
-	/// 多例 <c>IFacade</c> 实现
+	/// <see cref="IFacade"/> 实现(多例模式)
 	/// </summary>
 	/// <seealso cref="Model"/>
 	/// <seealso cref="View"/>
@@ -16,21 +16,17 @@ namespace KiwiFramework.PureMVC.Patterns
 	public class Facade : IFacade
 	{
 		/// <summary>
-		/// 构造方法.
+		/// 构造方法
 		/// </summary>
 		/// <param name="key">唯一键值</param>
 		/// <remarks>
-		/// 	<para>
-		///			<c>IFacade</c> 的实现是一个多例模式，
-		/// 		所以不应该直接调用构造函数，而是调用静态工厂方法，
-		/// 		传递这个实例的唯一键值.
-		/// 	</para>
-		/// </remarks>
+		///	<see cref="IFacade"/> 的实现采用多例模式, 所以不应该直接调用构造函数, 而是调用<c>GetInstance</c>方法, 并传递这个实例的唯一键值.
 		/// <example>
-		/// 	<code>
-		/// 		Facade.GetInstance( multitonKey, key => new Facade(key) )
-		/// 	</code>
+		/// <code>
+		/// Facade.GetInstance( multitonKey, key => new Facade(key) )
+		/// </code>
 		/// </example>
+		/// </remarks>
 		public Facade(string key)
 		{
 			InitializeNotifier(key);
@@ -222,8 +218,8 @@ namespace KiwiFramework.PureMVC.Patterns
 		/// <param name="type">通知类型 (optional)</param>
 		public virtual void SendNotification(string notificationName, object body = null, string type = null)
 			=> NotifyObservers(new Notification(notificationName, body, type));
-		
-		
+
+
 
 		/// <summary>
 		/// 通知 <c>Observer</c>.

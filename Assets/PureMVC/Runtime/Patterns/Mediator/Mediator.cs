@@ -1,87 +1,80 @@
-﻿//
-//  PureMVC C# Multicore
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
-
-using KiwiFramework.PureMVC.Interfaces;
-using KiwiFramework.PureMVC.Patterns;
+﻿using KiwiFramework.PureMVC.Interfaces;
 
 namespace KiwiFramework.PureMVC.Patterns
 {
-    /// <summary>
-    /// A base <c>IMediator</c> implementation. 
-    /// </summary>
-    /// <seealso cref="PureMVC.Core.View"/>
-    public class Mediator : Notifier, IMediator
-    {
-        /// <summary>
-        /// The name of the <c>Mediator</c>. 
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         Typically, a <c>Mediator</c> will be written to serve
-        ///         one specific control or group controls and so,
-        ///         will not have a need to be dynamically named.
-        ///     </para>
-        /// </remarks>
-        public const string NAME = "Mediator";
+	/// <summary>
+	/// <c>IMediator</c>接口的基本实现。
+	/// </summary>
+	/// <seealso cref="PureMVC.Core.View"/>
+	public class Mediator : Notifier, IMediator
+	{
+		/// <summary> 
+		/// <c>Mediator</c>的名称。 
+		/// </summary> 
+		/// <remarks> 
+		///     <para> 
+		///         通常，<c>Mediator</c>将被编写为服务于一个特定的控件或控件组， 
+		///         因此不需要动态命名。 
+		///     </para> 
+		/// </remarks>
+		public const string NAME = "Mediator";
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="mediatorName"></param>
-        /// <param name="viewComponent"></param>
-        public Mediator(string mediatorName, object viewComponent = null)
-        {
-            MediatorName = mediatorName ?? NAME;
-            ViewComponent = viewComponent;
-        }
+		/// <summary>
+		/// 构造函数.
+		/// </summary>
+		/// <param name="mediatorName"><c>Mediator</c>的名称。 </param>
+		/// <param name="viewComponent">服务的组件对象</param>
+		public Mediator(string mediatorName, object viewComponent = null)
+		{
+			MediatorName  = mediatorName ?? NAME;
+			ViewComponent = viewComponent;
+		}
 
-        /// <summary>
-        /// List the <c>INotification</c> names this
-        /// <c>Mediator</c> is interested in being notified of.
-        /// </summary>
-        /// <returns>the list of <c>INotification</c> names</returns>
-        public virtual string[] ListNotificationInterests()
-        {
-            return new string[0];
-        }
+		/// <summary>
+		/// 列出此<c>Mediator</c>感兴趣接收通知的<c>INotification</c>名称。
+		/// </summary>
+		/// <returns><c>INotification</c>名称列表</returns>
+		public virtual string[] ListNotificationInterests()
+		{
+			return new string[0];
+		}
 
-        /// <summary>
-        /// Handle <c>INotification</c>s.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         Typically this will be handled in a switch statement,
-        ///         with one 'case' entry per <c>INotification</c>
-        ///         the <c>Mediator</c> is interested in.
-        ///     </para>
-        /// </remarks>
-        /// <param name="notification"></param>
-        public virtual void HandleNotification(INotification notification)
-        {
-        }
+		/// <summary> 
+		/// 处理<c>INotification</c>。 
+		/// </summary> 
+		/// <remarks> 
+		///     <para> 
+		///         通常情况下，这将在switch语句中处理，每个<c>INotification</c>都有一个'case'条目， 
+		///         <c>Mediator</c>感兴趣。 
+		///     </para> 
+		/// </remarks> 
+		/// <param name="notification"></param>
+		public virtual void HandleNotification(INotification notification)
+		{
+		}
 
-        /// <summary>
-        /// Called by the View when the Mediator is registered
-        /// </summary>
-        public virtual void OnRegister()
-        {
-        }
+		/// <summary> 
+		/// 当Mediator被注册时，由View调用 
+		/// </summary>
+		public virtual void OnRegister()
+		{
+		}
 
-        /// <summary>
-        /// Called by the View when the Mediator is removed
-        /// </summary>
-        public virtual void OnRemove()
-        {
-        }
+		/// <summary>
+		/// Called by the View when the Mediator is removed
+		/// </summary>
+		public virtual void OnRemove()
+		{
+		}
 
-        /// <summary>the mediator name</summary>
-        public string MediatorName { get; protected set; }
+		/// <summary> 
+		/// 当Mediator被移除时，由View调用 
+		/// </summary>
+		public string MediatorName { get; protected set; }
 
-        /// <summary>The view component</summary>
-        public object ViewComponent { get; set; }
-    }
+		/// <summary>
+		/// 视图组件
+		/// </summary>
+		public object ViewComponent { get; set; }
+	}
 }

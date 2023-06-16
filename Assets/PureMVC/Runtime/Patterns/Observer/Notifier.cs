@@ -1,111 +1,109 @@
-﻿//
-//  PureMVC C# Multicore
-//
-//  Copyright(c) 2020 Saad Shams <saad.shams@puremvc.org>
-//  Your reuse is governed by the Creative Commons Attribution 3.0 License
-//
-
-using System;
+﻿using System;
 
 using KiwiFramework.PureMVC.Interfaces;
 
 namespace KiwiFramework.PureMVC.Patterns
 {
-    /// <summary>
-    /// A Base <c>INotifier</c> implementation.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         <c>MacroCommand, Command, Mediator</c> and <c>Proxy</c> 
-    ///         all have a need to send <c>Notifications</c>.
-    ///     </para>
-    ///     <para>
-    ///         The <c>INotifier</c> interface provides a common method called
-    ///         <c>sendNotification</c> that relieves implementation code of 
-    ///         the necessity to actually construct <c>Notifications</c>.
-    ///     </para>
-    ///     <para>
-    ///         The <c>Notifier</c> class, which all of the above mentioned classes
-    ///         extend, provides an initialized reference to the <c>Facade</c>
-    ///         Multiton, which is required for the convienience method
-    ///         for sending <c>Notifications</c>, but also eases implementation as these
-    ///         classes have frequent <c>Facade</c> interactions and usually require
-    ///         access to the facade anyway.
-    ///     </para>
-    ///     <para>
-    ///         NOTE: In the MultiCore version of the framework, there is one caveat to
-    ///         notifiers, they cannot send notifications or reach the facade until they
-    ///         have a valid multitonKey.
-    ///         The multitonKey is set:
-    ///         <list type="bullet">
-    ///             <item>on a Command when it is executed by the Controller</item>
-    ///             <item>on a Mediator is registered with the View</item>
-    ///             <item>on a Proxy is registered with the Model.</item>
-    ///         </list>
-    ///     </para>
-    /// </remarks>
-    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Proxy"/>
-    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Facade"/>
-    /// <seealso cref="KiwiFramework.PureMVC.Patterns.Mediator"/>
-    /// <seealso cref="KiwiFramework.PureMVC.Patterns.MacroCommand"/>
-    /// <seealso cref="KiwiFramework.PureMVC.Patterns.SimpleCommand"/>
-    public class Notifier: INotifier
-    {
-        /// <summary>
-        /// Create and send an <c>INotification</c>.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         Keeps us from having to construct new INotification 
-        ///         instances in our implementation code.
-        ///     </para>
-        /// </remarks>
-        /// <param name="notificationName">the name of the notiification to send</param>
-        /// <param name="body">the body of the notification (optional)</param>
-        /// <param name="type">the type of the notification (optional)</param>
-        public virtual void SendNotification(string notificationName, object body = null, string type = null)
-        {
-            Facade.SendNotification(notificationName, body, type);
-        }
+	/// <summary> 
+	/// 基本<c> INotifier </c>实现。 
+	/// </summary> 
+	/// <remarks> 
+	/// <para> 
+	/// <c> MacroCommand，Command，Mediator </c>和<c> Proxy </c> 
+	/// 都需要发送<c>通知</c>。 
+	/// </para> 
+	/// <para> 
+	/// <c> INotifier </c>接口提供了一个常用方法，称为 
+	/// <c> sendNotification </c>，该方法解除了实现代码的负担 
+	/// 实际上构造<c> Notifications </c>。 
+	/// </para> 
+	/// <para> 
+	/// 所有上述类都扩展的<c> Notifier </c>类 
+	/// 提供了对<c> Facade </c>的初始化引用 
+	/// Multiton，这对于方便方法是必需的 
+	/// 发送<c>通知</c>，但也简化了实现，因为这些 
+	/// 类具有频繁的<c> Facade </c>交互并且通常需要 
+	/// 访问外观。 
+	/// </para> 
+	/// <para> 
+	/// 注意：在框架的MultiCore版本中，有一个警告 
+	/// 通知器，除非它们具有有效的multitonKey，否则它们无法发送通知或到达facade。 
+	/// multitonKey设置为： 
+	/// <list type =“bullet”> 
+	/// <item>在控制器执行命令时</item> 
+	/// <item>在Mediator注册到View时</item> 
+	/// <item>在代理向Model注册时。</item> 
+	/// </list> 
+	/// </para> 
+	/// </remarks> 
+	/// <seealso cref =“KiwiFramework.PureMVC.Patterns.Proxy”/> 
+	/// <seealso cref =“KiwiFramework.PureMVC.Patterns.Facade”/> 
+	/// <seealso cref =“KiwiFramework.PureMVC.Patterns.Mediator”/> 
+	/// <seealso cref =“KiwiFramework.PureMVC.Patterns.MacroCommand”/> 
+	/// <seealso cref =“KiwiFramework.PureMVC.Patterns.SimpleCommand”/> 
+	public class Notifier : INotifier
+	{
+		/// <summary> 
+		/// 创建并发送<c> INotification </c>。 
+		/// </summary> 
+		/// <remarks> 
+		/// <para> 
+		/// 让我们不必在实现代码中构造新的INotification 
+		/// 实例。 
+		/// </para> 
+		/// </remarks> 
+		/// <param name =“notificationName”>要发送的通知的名称</ param> 
+		/// <param name =“body”>通知的正文（可选）</ param> 
+		/// <param name =“type”>通知的类型（可选）</ param> 
+		public virtual void SendNotification(string notificationName, object body = null, string type = null)
+		{
+			Facade.SendNotification(notificationName, body, type);
+		}
 
-        /// <summary>
-        /// Initialize this INotifier instance.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         This is how a Notifier gets its multitonKey. 
-        ///         Calls to sendNotification or to access the
-        ///         facade will fail until after this method 
-        ///         has been called.
-        ///     </para>
-        ///     <para>
-        ///         Mediators, Commands or Proxies may override 
-        ///         this method in order to send notifications
-        ///         or access the Multiton Facade instance as
-        ///         soon as possible. They CANNOT access the facade
-        ///         in their constructors, since this method will not
-        ///         yet have been called.
-        ///     </para>
-        /// </remarks>
-        /// <param name="key">the multitonKey for this INotifier to use</param>
-        public void InitializeNotifier(string key)
-        {
-            MultitonKey = key;
-        }
+		/// <summary> 
+		/// 初始化此INotifier实例。 
+		/// </summary> 
+		/// <remarks> 
+		/// <para> 
+		/// 这是Notifier获取其multitonKey的方法。 
+		/// 调用sendNotification或访问 
+		/// 外观将在此方法调用之后失败。 
+		/// </para> 
+		/// <para> 
+		/// Mediators，Commands或Proxies可以覆盖 
+		/// 此方法以便尽快发送通知 
+		/// 或访问Multiton Facade实例为 
+		/// 尽快。他们不能访问facade 
+		/// 在其构造函数中，因为此方法不会 
+		/// 尚未被调用。 
+		/// </para> 
+		/// </remarks> 
+		/// <param name =“key”>此INotifier要使用的multitonKey</ param> 
+		public void InitializeNotifier(string key)
+		{
+			MultitonKey = key;
+		}
 
-        /// <summary> Return the Multiton Facade instance</summary>
-        protected IFacade Facade
-        {
-            get {
-                if (MultitonKey == null) throw new Exception(MULTITON_MSG);
-                return KiwiFramework.PureMVC.Patterns.Facade.GetInstance(MultitonKey, key => new KiwiFramework.PureMVC.Patterns.Facade(key));
-            }
-        }
+		/// <summary>
+		/// 返回Multiton Facade实例
+		/// </summary> 
+		protected IFacade Facade
+		{
+			get
+			{
+				if (MultitonKey == null) throw new Exception(MULTITON_MSG);
+				return KiwiFramework.PureMVC.Patterns.Facade.GetInstance(MultitonKey, key => new KiwiFramework.PureMVC.Patterns.Facade(key));
+			}
+		}
 
-        /// <summary>The Multiton Key for this app</summary>
-        public string MultitonKey { get; protected set; }
+		/// <summary>
+		/// 此应用程序的Multiton Key
+		/// </summary> 
+		public string MultitonKey { get; protected set; }
 
-        /// <summary>Message Constants</summary>
-        protected string MULTITON_MSG = "multitonKey for this Notifier not yet initialized!";
-    }
+		/// <summary>
+		/// 消息常量
+		/// </summary> 
+		protected string MULTITON_MSG = "multitonKey for this Notifier not yet initialized!";
+	}
 }
