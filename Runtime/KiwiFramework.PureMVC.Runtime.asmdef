@@ -1,5 +1,5 @@
 {
-    "name": "PureMVC.Runtime",
+    "name": "KiwiFramework.PureMVC.Runtime",
     "rootNamespace": "KiwiFramework.PureMVC",
     "references": [],
     "includePlatforms": [],
