@@ -31,24 +31,30 @@ namespace KiwiFramework.PureMVC.Patterns
 		}
 
 		/// <summary>
-		/// Get the string representation of the <c>Notification</c> instance.
+		/// 获取 <c>Notification</c> 实例的字符串表示形式。
 		/// </summary>
-		/// <returns>the string representation of the <c>Notification</c> instance.</returns>
+		/// <returns><c>Notification</c> 实例的字符串表示.</returns>
 		public override string ToString()
 		{
 			var msg = "Notification Name: " + Name;
 			msg += "\nBody:" + ((Body == null) ? "null" : Body.ToString());
-			msg += "\nType:" + ((Type == null) ? "null" : Type);
+			msg += "\nType:" + (Type ?? "null");
 			return msg;
 		}
 
-		/// <summary>the name of the notification instance</summary>
+		/// <summary>
+		/// Notification 实例的名称
+		/// </summary>
 		public string Name { get; }
 
-		/// <summary>the body of the notification instance</summary>
+		/// <summary>
+		/// Notification 实例的主体
+		/// </summary>
 		public object Body { get; set; }
 
-		/// <summary>the type of the notification instance</summary>
+		/// <summary>
+		/// Notification 实例的类型
+		/// </summary>
 		public string Type { get; set; }
 	}
 }

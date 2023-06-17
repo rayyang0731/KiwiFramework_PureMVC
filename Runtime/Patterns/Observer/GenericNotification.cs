@@ -6,6 +6,9 @@
 	/// <typeparam name="T">通知数据的类型</typeparam>
 	public class GenericNotification<T> : Notification where T : class, new()
 	{
+		/// <summary>
+		/// Notification 实例的数据
+		/// </summary>
 		public T Data { get; set; }
 
 		/// <summary>
@@ -18,6 +21,18 @@
 		{
 			Data = data;
 			Type = type;
+		}
+
+		/// <summary>
+		/// 获取 <c>Notification</c> 实例的字符串表示形式。
+		/// </summary>
+		/// <returns><c>Notification</c> 实例的字符串表示.</returns>
+		public override string ToString()
+		{
+			var msg = "Notification Name: " + Name;
+			msg += "\nData:" + ((Data == null) ? "null" : Data.ToString());
+			msg += "\nType:" + (Type ?? "null");
+			return msg;
 		}
 	}
 }

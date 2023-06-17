@@ -22,8 +22,10 @@ namespace KiwiFramework.PureMVC.Core
 		public Controller(string key)
 		{
 			multitonKey = key;
+			
 			InstanceMap.TryAdd(multitonKey, new Lazy<IController>(() => this));
 			commandMap = new ConcurrentDictionary<string, Func<ICommand>>();
+			
 			InitializeController();
 		}
 
